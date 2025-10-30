@@ -1,0 +1,310 @@
+<div class="pdf-viewer-container" 
+     [class.crosshair-active]="selectedButtonId !== null"
+     style="position: relative;">
+
+  <div class="checkbox-container">
+    <div class="checkbox-group" 
+         [ngStyle]="getCheckboxGroupStyle()"
+         [class.vertical]="checkboxGroupOrientation"
+         [class.horizontal]="!checkboxGroupOrientation">
+      
+      <div class="panel-header">
+        <div class="drag-handle" 
+             (mousedown)="onCheckboxGroupSmartMouseDown($event)"
+             (click)="onCheckboxGroupSmartClick($event)"
+             title="Drag to move • Click to toggle orientation">
+          <span class="material-symbols-outlined">{{ checkboxGroupOrientation ? 'view_stream' :'drag_indicator'}}</span>
+        </div>
+      </div>
+      
+      <div class="checkbox-items-container">
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="checkboxes.site" (change)="onCheckboxChange('site', $event)">
+          <span>Site</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="checkboxes.building" (change)="onCheckboxChange('building', $event)">
+          <span>Building</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="checkboxes.door" (change)="onCheckboxChange('door', $event)">
+          <span>Door</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="checkboxes.frame" (change)="onCheckboxChange('frame', $event)">
+          <span>Frame</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="checkboxes.hw" (change)="onCheckboxChange('hw', $event)">
+          <span>HW</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="checkboxes.ta" (change)="onCheckboxChange('ta', $event)">
+          <span>TA</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="checkboxes.legend" (change)="onCheckboxChange('legend', $event)">
+          <span>Legend</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" [(ngModel)]="checkboxes.pdfControls" (change)="onCheckboxChange('pdfControls', $event)">
+          <span>PDF Controls</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="selected-button-status" *ngIf="selectedButtonId">
+    <div class="status-message">
+      <span class="material-symbols-outlined">touch_app</span>
+      <span>Selected: {{ getButtonName(selectedButtonId) }} - Click on PDF to apply</span>
+    </div>
+  </div>
+
+  <div class="component-actions component-actions-site" 
+       *ngIf="checkboxes.site"
+       [ngStyle]="getPanelStyle('site')" 
+       [class.vertical]="orientationStates.site"
+       [class.horizontal]="!orientationStates.site">
+    <div class="panel-header">
+      <div class="drag-handle" 
+           (mousedown)="onSmartMouseDown($event, 'site')"
+           (click)="onSmartClick($event, 'site')"
+           title="Drag to move • Click to toggle orientation">
+        <span class="material-symbols-outlined">{{ orientationStates.site ? 'drag_indicator' : 'view_stream' }}</span>
+      </div>
+    </div>
+    <div class="button-columns-container">
+      <div class="button-column">
+        <div class="button-category" *ngFor="let button of buttonGroups.site; trackBy: trackByButtonId">
+          <button class="component-action-btn" 
+                  [class.selected]="isButtonSelected(button.id)"
+                  (click)="onButtonClick(button.id)" 
+                  [title]="getButtonName(button.id)">
+            {{ button.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-actions component-actions-building" 
+       *ngIf="checkboxes.building"
+       [ngStyle]="getPanelStyle('building')" 
+       [class.vertical]="orientationStates.building"
+       [class.horizontal]="!orientationStates.building">
+    <div class="panel-header">
+      <div class="drag-handle" 
+           (mousedown)="onSmartMouseDown($event, 'building')"
+           (click)="onSmartClick($event, 'building')"
+           title="Drag to move • Click to toggle orientation">
+        <span class="material-symbols-outlined">{{ orientationStates.building ? 'drag_indicator' : 'view_stream' }}</span>
+      </div>
+    </div>
+    <div class="button-columns-container">
+      <div class="button-column">
+        <div class="button-category" *ngFor="let button of buttonGroups.building; trackBy: trackByButtonId">
+          <button class="component-action-btn" 
+                  [class.selected]="isButtonSelected(button.id)"
+                  (click)="onButtonClick(button.id)" 
+                  [title]="getButtonName(button.id)">
+            {{ button.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-actions component-actions-door" 
+       *ngIf="checkboxes.door"
+       [ngStyle]="getPanelStyle('door')" 
+       [class.vertical]="orientationStates.door"
+       [class.horizontal]="!orientationStates.door">
+    <div class="panel-header">
+      <div class="drag-handle" 
+           (mousedown)="onSmartMouseDown($event, 'door')"
+           (click)="onSmartClick($event, 'door')"
+           title="Drag to move • Click to toggle orientation">
+        <span class="material-symbols-outlined">{{ orientationStates.door ? 'drag_indicator' : 'view_stream' }}</span>
+      </div>
+    </div>
+    <div class="button-columns-container">
+      <div class="button-column">
+        <div class="button-category" *ngFor="let button of buttonGroups.door; trackBy: trackByButtonId">
+          <button class="component-action-btn" 
+                  [class.selected]="isButtonSelected(button.id)"
+                  (click)="onButtonClick(button.id)" 
+                  [title]="getButtonName(button.id)">
+            {{ button.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-actions component-actions-frame" 
+       *ngIf="checkboxes.frame"
+       [ngStyle]="getPanelStyle('frame')" 
+       [class.vertical]="orientationStates.frame"
+       [class.horizontal]="!orientationStates.frame">
+    <div class="panel-header">
+      <div class="drag-handle" 
+           (mousedown)="onSmartMouseDown($event, 'frame')"
+           (click)="onSmartClick($event, 'frame')"
+           title="Drag to move • Click to toggle orientation">
+        <span class="material-symbols-outlined">{{ orientationStates.frame ? 'drag_indicator' : 'view_stream' }}</span>
+      </div>
+    </div>
+    <div class="button-columns-container">
+      <div class="button-column">
+        <div class="button-category" *ngFor="let button of buttonGroups.frame; trackBy: trackByButtonId">
+          <button class="component-action-btn" 
+                  [class.selected]="isButtonSelected(button.id)"
+                  (click)="onButtonClick(button.id)" 
+                  [title]="getButtonName(button.id)">
+            {{ button.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-actions component-actions-hw" 
+       *ngIf="checkboxes.hw"
+       [ngStyle]="getPanelStyle('hw')" 
+       [class.vertical]="orientationStates.hw"
+       [class.horizontal]="!orientationStates.hw">
+    <div class="panel-header">
+      <div class="drag-handle" 
+           (mousedown)="onSmartMouseDown($event, 'hw')"
+           (click)="onSmartClick($event, 'hw')"
+           title="Drag to move • Click to toggle orientation">
+        <span class="material-symbols-outlined">{{ orientationStates.hw ? 'drag_indicator' : 'view_stream' }}</span>
+      </div>
+    </div>
+    <div class="button-columns-container">
+      <div class="button-column">
+        <div class="button-category" *ngFor="let button of buttonGroups.hw; trackBy: trackByButtonId">
+          <button class="component-action-btn" 
+                  [class.selected]="isButtonSelected(button.id)"
+                  (click)="onButtonClick(button.id)" 
+                  [title]="getButtonName(button.id)">
+            {{ button.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-actions component-actions-ta" 
+       *ngIf="checkboxes.ta"
+       [ngStyle]="getPanelStyle('ta')" 
+       [class.vertical]="orientationStates.ta"
+       [class.horizontal]="!orientationStates.ta">
+    <div class="panel-header">
+      <div class="drag-handle" 
+           (mousedown)="onSmartMouseDown($event, 'ta')"
+           (click)="onSmartClick($event, 'ta')"
+           title="Drag to move • Click to toggle orientation">
+        <span class="material-symbols-outlined">{{ orientationStates.ta ? 'drag_indicator' : 'view_stream' }}</span>
+      </div>
+    </div>
+    <div class="button-columns-container">
+      <div class="button-column">
+        <div class="button-category" *ngFor="let button of buttonGroups.ta; trackBy: trackByButtonId">
+          <button class="component-action-btn" 
+                  [class.selected]="isButtonSelected(button.id)"
+                  (click)="onButtonClick(button.id)" 
+                  [title]="getButtonName(button.id)">
+            {{ button.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-actions component-actions-legend" 
+       *ngIf="checkboxes.legend"
+       [ngStyle]="getPanelStyle('legend')" 
+       [class.vertical]="orientationStates.legend"
+       [class.horizontal]="!orientationStates.legend">
+    <div class="panel-header">
+      <div class="drag-handle" 
+           (mousedown)="onSmartMouseDown($event, 'legend')"
+           (click)="onSmartClick($event, 'legend')"
+           title="Drag to move • Click to toggle orientation">
+        <span class="material-symbols-outlined">{{ orientationStates.legend ? 'drag_indicator' : 'view_stream' }}</span>
+      </div>
+    </div>
+    <div class="button-columns-container">
+      <div class="button-column">
+        <div class="button-category" *ngFor="let button of buttonGroups.legend; trackBy: trackByButtonId">
+          <button class="component-action-btn" 
+                  [class.selected]="isButtonSelected(button.id)"
+                  (click)="onButtonClick(button.id)" 
+                  [title]="getButtonName(button.id)">
+            {{ button.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="component-actions component-actions-pdf" 
+       *ngIf="checkboxes.pdfControls"
+       [ngStyle]="getPanelStyle('pdfControls')" 
+       [class.vertical]="orientationStates.pdfControls"
+       [class.horizontal]="!orientationStates.pdfControls">
+    <div class="panel-header">
+      <div class="drag-handle" 
+           (mousedown)="onSmartMouseDown($event, 'pdfControls')"
+           (click)="onSmartClick($event, 'pdfControls')"
+           title="Drag to move • Click to toggle orientation">
+        <span class="material-symbols-outlined">{{ orientationStates.pdfControls ? 'drag_indicator' : 'view_stream' }}</span>
+      </div>
+    </div>
+    <div class="button-columns-container">
+      <div class="button-column">
+        <button class="component-action-btn" (click)="onPdfZoomIn()" title="Zoom In">
+          <span class="material-symbols-outlined">zoom_in</span>
+          Zoom In
+        </button>
+        <button class="component-action-btn" (click)="onPdfZoomOut()" title="Zoom Out">
+          <span class="material-symbols-outlined">zoom_out</span>
+          Zoom Out
+        </button>
+        <button class="component-action-btn" (click)="onPdfRotateLeft()" title="Rotate Left">
+          <span class="material-symbols-outlined">rotate_left</span>
+          Rotate Left
+        </button>
+        <button class="component-action-btn" (click)="onPdfRotateRight()" title="Rotate Right">
+          <span class="material-symbols-outlined">rotate_right</span>
+          Rotate Right
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ngx-extended-pdf-viewer
+    [src]="pdfSrc"
+    [page]="pageNumber"
+    [height]="height"
+    useBrowserLocale="true"
+     [showSidebarButton]="true"
+    [showFindButton]="true"
+    [showPagingButtons]="true"
+    [showPresentationModeButton]="true"
+    [showOpenFileButton]="true"
+    [showPrintButton]="true"
+    [showDownloadButton]="true"
+    [showSecondaryToolbarButton]="true"
+    [showRotateButton]="true"
+    [showHandToolButton]="true"
+    [showSpreadButton]="true"
+    [showPropertiesButton]="true"
+    [showToolbar]="true"
+    [showZoomButtons]="true"
+    (pageRendered)="onPageRendered($event)">
+  </ngx-extended-pdf-viewer>
+
+</div>

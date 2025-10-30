@@ -1,0 +1,355 @@
+/* Existing styles for the container */
+.pdf-viewer-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  ngx-extended-pdf-viewer {
+    flex: 1;
+    width: 100%;
+  }
+
+  // Crosshair cursor for PDF pages
+  &.crosshair-active {
+    ::ng-deep {
+      .page {
+        cursor: crosshair !important;
+      }
+      
+      .textLayer {
+        cursor: crosshair !important;
+      }
+      
+      .annotationLayer {
+        cursor: crosshair !important;
+      }
+      
+      canvas {
+        cursor: crosshair !important;
+      }
+    }
+  }
+}
+
+/* Existing styles for annotations */
+:host ::ng-deep {
+  .my-annotation {
+    position: absolute;
+    border: 2px solid #007bff;
+    background-color: rgba(0, 123, 255, 0.15);
+    box-sizing: border-box;
+    transition: background-color 0.2s;
+    pointer-events: none;
+  }
+  
+  .my-annotation:hover {
+    background-color: rgba(0, 123, 255, 0.3);
+  }
+
+  .my-annotation-text {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background-color: #007bff;
+    color: white;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-family: Arial, sans-serif;
+  }
+
+  /* NEW: SVG Overlay for annotations */
+  .annotation-svg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .annotation-svg-overlay text {
+    font-family: Arial, sans-serif;
+  }
+
+  // Legend label styling
+  .legend-label {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .xml-annotation-legend {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+/* --- NEW STYLES COPIED FROM detection.component.scss --- */
+
+/* Top center checkboxes */
+.checkbox-container {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  z-index: 999;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+/* Selected button status */
+.selected-button-status {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  
+  .status-message {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    animation: statusSlideIn 0.3s ease-out;
+    
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
+  }
+}
+
+@keyframes statusSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Checkbox Group Panel */
+.checkbox-group {
+  position: absolute;
+  display: flex;
+  padding: 0px;
+  background-color: rgba(236,236,236,0.8);
+  border-radius: 0px;
+  border: 1px solid rgba(200, 200, 200, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  transition: all 0.0s ease;
+  user-select: none;
+  cursor: grab;
+  
+  &.horizontal {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    
+    .checkbox-items-container {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
+      padding-right: 2px;
+    }
+  }
+  
+  &.vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    
+    .checkbox-items-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-start;
+    }
+  }
+}
+
+/* Checkbox Items */
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 4px;
+  border-radius: 0px;
+  transition: all 0.0s ease;
+  border: 1px solid transparent;
+  
+  input[type="checkbox"] {
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+    margin: 0;
+  }
+  
+  span {
+    user-select: none;
+    font-weight: 600;
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Colors for checkboxes */
+  &:nth-child(1) { background-color: #877b98; border-color: #877b98; color: #fff; input { accent-color: #5d536b; } }
+  &:nth-child(2) { background-color: #c3be5c; border-color: #c3be5c; color: #000; input { accent-color: #8d8944; } }
+  &:nth-child(3) { background-color: #82958e; border-color: #82958e; color: #fff; input { accent-color: #5a6662; } }
+  &:nth-child(4) { background-color: #659784; border-color: #659784; color: #fff; input { accent-color: #4a6e60; } }
+  &:nth-child(5) { background-color: #778c97; border-color: #778c97; color: #fff; input { accent-color: #586870; } }
+  &:nth-child(6) { background-color: #a45e54; border-color: #a45e54; color: #fff; input { accent-color: #7e4840; } }
+  &:nth-child(7) { background-color: #cbafce; color: #fff; input { accent-color: #857286; } }
+}
+
+/* Action Panels (base) */
+.component-actions {
+  position: absolute;
+  display: flex;
+  padding: 2px;
+  border-radius: 8px;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.0s ease;
+  user-select: none;
+  
+  &.horizontal {
+    flex-direction: row;
+    align-items: flex-start;
+    .button-columns-container { display: flex; flex-direction: column; gap: 8px; }
+    .button-column { display: flex; flex-direction: row; align-items: center; gap: 8px; }
+    .button-category { flex-direction: row; gap: 4px; }
+  }
+  
+  &.vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    .button-columns-container { display: flex; flex-direction: row; gap: 6px; flex-wrap: wrap; }
+    .button-column { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .button-category { flex-direction: column; gap: 2px; margin-bottom: 2px; }
+  }
+  
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Panel Header (Drag/Toggle) */
+.panel-header {
+  display: contents;
+  
+  .drag-handle {
+    cursor: grab;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 24px;
+    
+    &:hover {
+      background-color: rgba(200, 200, 200, 0.3);
+      transform: scale(1.05);
+    }
+    
+    &:active {
+      cursor: grabbing;
+      background-color: rgba(180, 180, 180, 0.4);
+      transform: scale(0.95);
+    }
+    
+    .material-symbols-outlined {
+      font-size: 16px;
+      color: #666;
+    }
+  }
+}
+
+/* Panel Colors */
+.component-actions-site { background-color: rgba(236, 236, 236, 0.8); border: 1px solid rgba(200, 200, 200, 0.3); box-shadow: 0 4px 12px rgba(135, 123, 152, 0.25); .drag-handle .material-symbols-outlined { color: #877b98; } }
+.component-actions-building { background-color: rgba(236, 236, 236, 0.8); border: 1px solid rgba(200, 200, 200, 0.3); box-shadow: 0 4px 12px rgba(195, 190, 92, 0.25); .drag-handle .material-symbols-outlined { color: #c3be5c; } }
+.component-actions-door { background-color: rgba(236, 236, 236, 0.8); border: 1px solid rgba(200, 200, 200, 0.3); box-shadow: 0 4px 12px rgba(101, 151, 132, 0.25); .drag-handle .material-symbols-outlined { color: #82958e; } }
+.component-actions-frame { background-color: rgba(236, 236, 236, 0.8); border: 1px solid rgba(200, 200, 200, 0.3); box-shadow: 0 4px 12px rgba(101, 151, 132, 0.25); .drag-handle .material-symbols-outlined { color: #659784; } }
+.component-actions-hw { background-color: rgba(236, 236, 236, 0.8); border: 1px solid rgba(200, 200, 200, 0.3); box-shadow: 0 4px 12px rgba(119, 140, 151, 0.25); .drag-handle .material-symbols-outlined { color: #778c97; } }
+.component-actions-ta { background-color: rgba(236, 236, 236, 0.8); border: 1px solid rgba(200, 200, 200, 0.3); box-shadow: 0 4px 12px rgba(164, 94, 84, 0.25); .drag-handle .material-symbols-outlined { color: #a45e54; } }
+.component-actions-legend { background-color: rgba(236, 236, 236, 0.8); border: 1px solid rgba(200, 200, 200, 0.3); box-shadow: 0 4px 12px rgba(200, 175, 206, 0.25); .drag-handle .material-symbols-outlined { color: #cbafce; } }
+.component-actions-pdf { background-color: rgba(236, 236, 236, 0.8); border: 1px solid rgba(200, 200, 200, 0.3); .drag-handle .material-symbols-outlined { color: #4CAF50; } }
+
+/* Panel Buttons */
+.component-action-btn {
+  background-color: #e0e0e0;
+  border: 1px solid rgba(211, 211, 211, 0.6);
+  padding: 2px;
+  border-radius: 0px;
+  cursor: pointer;
+  min-width: 22px;
+  height: 22px;
+  font-size: 10px !important;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  transition: all 0.2s ease;
+  position: relative;
+  
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  
+  &.selected {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #45a049;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+    transform: scale(1.1);
+    
+    &:hover {
+      background-color: #45a049;
+    }
+  }
+
+  .material-symbols-outlined {
+    font-size: 15px;
+  }
+}
+
+/* Button Colors */
+.component-actions-site button.component-action-btn { background-color: #877b98; color: #fff; &:hover { background-color: #6d647a; } }
+.component-actions-building button.component-action-btn { background-color: #c3be5c; color: #000; &:hover { background-color: #8d8944; } }
+.component-actions-door button.component-action-btn { background-color: #82958e; color: #fff; &:hover { background-color: #5a6662; } }
+.component-actions-frame button.component-action-btn { background-color: #659784; color: #fff; &:hover { background-color: #4a6e60; } }
+.component-actions-hw button.component-action-btn { background-color: #778c97; color: #fff; &:hover { background-color: #586870; } }
+.component-actions-ta button.component-action-btn { background-color: #a45e54; color: #fff; &:hover { background-color: #a45e54; } }
+.component-actions-legend button.component-action-btn { background-color: #cbafce; color: #fff; &:hover { background-color: #b99dbe; } }
+
+/* PDF Controls Panel (for zoom/rotate buttons) */
+.component-actions-pdf .component-action-btn {
+  .material-symbols-outlined {
+    font-size: 16px;
+    margin-right: 4px;
+  }
+}
